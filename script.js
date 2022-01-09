@@ -123,6 +123,9 @@ function game() {
                             } else if (status == playerTwo.getPlayerSymbol()) {
                                 console.log(`${playerTwo.getPlayerName()} wins!`);
                                 victoryAchieved = true;
+                            } else if (status == false && currentTurn == 9) {
+                                victoryAchieved = true;
+                                console.log('Tie');
                             }
                         }
                     });
