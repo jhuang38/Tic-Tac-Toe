@@ -8,7 +8,6 @@ const gameBoard = (() => {
     // update gameboard 
     const updateBoard = (row, column, value) => {
         gameBoard[row][column] = value;
-        console.log(gameBoard);
     }
 
     // check for victory
@@ -106,7 +105,6 @@ function game() {
                     const cell = document.querySelector(`[data-row="${i}"][data-column="${k}"]`);
                     cell.addEventListener('click', () => {
                         if (cell.textContent == ' ' && !victoryAchieved) {
-                            console.log(currentSymbol);
                             cell.textContent = currentSymbol;
                             gameBoard.updateBoard(i, k, currentSymbol);
                             ++currentTurn;
