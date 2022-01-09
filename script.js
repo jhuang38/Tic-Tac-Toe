@@ -1,4 +1,4 @@
-// tic tac toe script
+// tic tac toe
 
 // gameboard
 const gameBoard = (() => {
@@ -34,6 +34,7 @@ const gameBoard = (() => {
                 break;
             }
         }
+
         // check diagonals
         if (gameBoard[0][0] == gameBoard[1][1] && gameBoard[1][1] == gameBoard[2][2] && gameBoard[0][0] != ' ' && gameBoard[1][1] != ' ' &&  gameBoard[2][2] != ' ') {
             if (gameBoard[0][0] == p1Symbol && gameBoard[1][1] == p1Symbol && gameBoard[2][2] == p1Symbol) {
@@ -49,10 +50,11 @@ const gameBoard = (() => {
                 check = p2Symbol;
             }
         }
+
         return check;
     });
 
-    // honestly optional, but more abstraction is :)
+    // honestly optional, but more abstraction is good
     const doVictoryCheck = ((p1Sym, p2Sym) => {
         return victoryStatus(p1Sym, p2Sym);
     });
@@ -99,16 +101,21 @@ function game() {
                     board.appendChild(newCell);
                 }
             }
-            // add event listeners for each cell
+            // add event listeners for each cell which will check game state
             for (let i = 0; i < 3; ++i) {
                 for (let k = 0; k < 3; ++k) {
                     const cell = document.querySelector(`[data-row="${i}"][data-column="${k}"]`);
                     cell.addEventListener('click', () => {
+                        // check if cell is empty and if game is not over
                         if (cell.textContent == ' ' && !victoryAchieved) {
                             cell.textContent = currentSymbol;
                             gameBoard.updateBoard(i, k, currentSymbol);
+
+                            // update turn for players
                             ++currentTurn;
                             currentSymbol = (currentTurn % 2 == 0) ? playerOne.getPlayerSymbol() : playerTwo.getPlayerSymbol();
+
+                            // check if victory function has returned which symbol has won, as output is false if no one has won
                             let status = gameBoard.doVictoryCheck(playerOne.getPlayerSymbol(), playerTwo.getPlayerSymbol());
                             if (status == playerOne.getPlayerSymbol()) {
                                 console.log(`${playerOne.getPlayerName()} wins!`);
@@ -127,15 +134,20 @@ function game() {
             addCells,
         }
     })();
-    // player 1 plays on turn 0, 2, 4, etc.
-    // player 2 plays on 1,3,5, ...
-    // 
+    
     playerOne = Player('Player one', 'X');
     playerTwo = Player('Player two', 'O');
     let currentTurn = 0;
+
+    // player 1 plays on turn 0, 2, 4, etc.
+    // player 2 plays on 1,3,5, ...
+    // hence expressions updating currentSymbol will work with this expression
     let currentSymbol = (currentTurn % 2 == 0) ? playerOne.getPlayerSymbol() : playerTwo.getPlayerSymbol();
+
     let victoryAchieved = false;
     displayController.addCells();
+
+    // beyond here, the game logic is handled by the event listeners in each cell and the gameBoard module
     
 }
 
