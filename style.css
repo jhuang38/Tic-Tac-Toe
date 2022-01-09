@@ -41,5 +41,10 @@ body {
 }
 
 .cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
     border: 5px solid black;
+    font-size:144px;
 }
