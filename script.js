@@ -89,6 +89,28 @@ function game() {
     // game controller
     const displayController = (() => {
         const board = document.querySelector(`.board`);
+        const textDisplay = document.querySelector('.displayText');
+        textDisplay.textContent = 'Click one of the tiles to get started!';
+
+        // set up resetting
+        function resetGame() {
+            textDisplay.textContent = 'Click one of the tiles to get started!';
+            for (let i = 0; i < 3; ++i) {
+                for (let k = 0; k < 3; ++k) {
+                    gameBoard.updateBoard(i, k, ' ');
+                }
+                currentTurn = 0;
+                currentSymbol = (currentTurn % 2 == 0) ? playerOne.getPlayerSymbol() : playerTwo.getPlayerSymbol();
+                victoryAchieved = false;
+                const cellList = Array.from(document.querySelectorAll('.cell'));
+                cellList.forEach((element) => {
+                    element.textContent = ' ';
+                });
+            }
+        }
+        const resetButton = document.querySelector('.resetButton');
+        resetButton.addEventListener('click', resetGame);
+
     
         function addCells() {
             for (let i = 0; i < 3; ++i) {
@@ -114,18 +136,23 @@ function game() {
                             // update turn for players
                             ++currentTurn;
                             currentSymbol = (currentTurn % 2 == 0) ? playerOne.getPlayerSymbol() : playerTwo.getPlayerSymbol();
+                            textDisplay.textContent = `${currentSymbol}'s turn!`
 
                             // check if victory function has returned which symbol has won, as output is false if no one has won
                             let status = gameBoard.doVictoryCheck(playerOne.getPlayerSymbol(), playerTwo.getPlayerSymbol());
                             if (status == playerOne.getPlayerSymbol()) {
-                                console.log(`${playerOne.getPlayerName()} wins!`);
+                                textDisplay.textContent = `${playerOne.getPlayerName()} wins!`;
+                                textDisplay.setAttribute('style', 'visibility: visible');
                                 victoryAchieved = true;
                             } else if (status == playerTwo.getPlayerSymbol()) {
-                                console.log(`${playerTwo.getPlayerName()} wins!`);
+                                textDisplay.textContent = `${playerTwo.getPlayerName()} wins!`;
+                                textDisplay.setAttribute('style', 'visibility: visible');
                                 victoryAchieved = true;
                             } else if (status == false && currentTurn == 9) {
+                                // basicaly if all the squares have been filled and none of the other conditions have been triggered, there is a tie
                                 victoryAchieved = true;
-                                console.log('Tie');
+                                textDisplay.textContent = `Tie game!`;
+                                textDisplay.setAttribute('style', 'visibility: visible');
                             }
                         }
                     });
